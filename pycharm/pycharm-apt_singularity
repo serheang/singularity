@@ -2,7 +2,7 @@ Bootstrap: debootstrap
 OSVersion: bionic
 MirrorURL: http://archive.ubuntu.com/ubuntu/
 
-Include: apt dpkg tar gzip python3-pip python-pip
+Include: apt dpkg tar gzip 
 
 %label
   MAINTAINER setan
