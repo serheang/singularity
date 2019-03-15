@@ -18,7 +18,7 @@ Include: yum tar gzip
   yum install -y epel-release
   yum install -y wget tar gzip which
   yum install -y libXext libXrender libXtst libXi freetype 
-  yum install -y python34 python34-pip
+  yum install -y python36 python36-pip
   yum install -y python python-pip
   yum clean all
 
