@@ -1,0 +1,25 @@
+Bootstrap: yum
+OSVersion:7
+MirrorURL: http://mirror.centos.org/centos/%{OSVersion}/os/$basearch/
+Include: yum wget tar gzip
+
+%label
+  MAINTAINER setan
+  WHATAMI glances
+  VERSION 1.0
+
+%environment
+  export PATH=/usr/local/bin:$PATH
+
+%files
+
+%post
+  yum -y update
+  yum -y install epel-release
+  yum -y install glances
+  #wget -O- https://bit.ly/glances | /bin/bash
+  yum clean all
+  yum clean metadata
+
+%runscript
+  echo "Run Glances in server mode"
