@@ -32,5 +32,5 @@ from:ubuntu:16.04
 
 %runscript
   echo "Run Pycharm"
-  /usr/local/bin/pycharm
+  pycharm
 
