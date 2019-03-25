@@ -22,4 +22,5 @@ Include: yum wget tar gzip
   yum clean metadata
 
 %runscript
-  echo "Run Glances in server mode"
+  echo "Run Glances in browser mode with $@"
+  glances --browser -C "$@"
