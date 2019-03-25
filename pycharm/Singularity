@@ -1,5 +1,5 @@
 bootstrap: docker
-from:ubuntu:16.04
+from:ubuntu:latest
 
 %label
   MAINTAINER setan
@@ -32,5 +32,5 @@ from:ubuntu:16.04
 
 %runscript
   echo "Run Pycharm"
-  /usr/local/bin/pycharm
+  pycharm
 

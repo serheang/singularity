@@ -21,6 +21,7 @@ Include: yum tar gzip
   yum install -y python36 python36-pip
   yum install -y python python-pip
   yum clean all
+  yum clean metadata
 
   ## CLEANUP
   rm -f  pycharm-edu*.tar.gz
@@ -28,7 +29,6 @@ Include: yum tar gzip
   rm -f /opt/pycharm
   rm -f /usr/local/bin/pycharm
   rm -f /usr/local/bin/inspect
-  rm -rf /scratch/
 
   ## INSTALL
   wget https://download.jetbrains.com/python/pycharm-edu-2018.3.tar.gz
@@ -37,7 +37,6 @@ Include: yum tar gzip
   ln -s /opt/pycharm/bin/pycharm.sh /usr/local/bin/pycharm
   ln -s /opt/pycharm/bin/inspect.sh /usr/local/bin/inspect
   rm pycharm-edu-2018.3.tar.gz
-  mkdir /scratch
 
 %runscript
   echo "Run Pycharm"
