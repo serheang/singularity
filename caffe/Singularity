@@ -1,0 +1,26 @@
+Bootstrap: docker
+from: ubuntu:latest
+
+%environment
+  #Environment variables
+
+  #Use bash as default shell
+  SHELL=/bin/bash
+
+%setup
+  #Runs on host
+  #The path to the image is $SINGULARITY_ROOTFS
+
+%post
+  #Post setup script that run in container
+  apt update
+  apt install -y caffe-cuda
+  apt install -y caffe-cpu
+
+%runscript
+  #Executes with the singularity run command
+  #delete this section to use existing docker ENTRYPOINT command
+
+%test
+  #Test that script is a success
+
