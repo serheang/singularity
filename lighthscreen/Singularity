@@ -1,0 +1,23 @@
+bootstrap: docker
+from:fedora:latest
+
+%label
+  MAINTAINER setan
+  WHATAMI lightscreen
+  VERSION 2018.3
+
+%environment
+  export PATH=/usr/local/bin:$PATH
+
+%post
+  dnf -y remove sssd-client
+  dnf -y install https://raw.githubusercontent.com/rpmsphere/noarch/master/r/rpmsphere-release-29-2.noarch.rpm
+  dnf -y install lightscreen
+  dnf -y clean metadata
+  dnf -y clean all
+
+
+%runscript
+  echo "Run lightscreen"
+  lightscreen
+
