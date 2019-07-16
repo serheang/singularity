@@ -1,0 +1,71 @@
+Bootstrap: docker
+From: ros:melodic-robot
+
+%help
+ROS Melodic on Ubuntu 18.04 with additional packages for the subject 49274 Advanced Robotics running in singularity container (https://sylabs.io)
+
+If you run the Singularity without parameters, it will give you a bash shell prompt with in the Singularity container.
+
+Usage:
+singularity run ros-melodic-ar.sif <parameters>
+or
+singularity shell ros-melodic-ar.sif
+
+Example: singularity run ros-melodic-ar.sif roscore
+
+%labels
+  AUTHOR Brenton Leighton brenton.leighton@uts.edu.au
+  MAINTAINER Brenton Leighton
+  WHATAMI ROS Melodic Singularity container
+  VERSION 1.0
+
+
+%files
+
+%post
+
+# Use the Australian mirror
+  sed -i 's|http://archive.ubuntu.com|http://au.archive.ubuntu.com|g' /etc/apt/sources.list
+
+# Update and upgrade system
+  apt update
+  apt upgrade -y
+
+# Install ROS desktop full and other packages
+  apt install -y ros-melodic-desktop-full ros-melodic-map-server \
+      ros-melodic-teleop-twist-keyboard ros-melodic-turtlebot3 \
+      ros-melodic-turtlebot3-simulations qtcreator
+
+# For checking VirtualGL performance
+  apt install -y mesa-utils
+
+# Clean up
+  apt autoremove -y
+  apt clean
+  apt autoclean
+
+%environment
+  PS1='Singularity ROS: \w> '
+  if [ -f ~/catkin_ws/devel/setup.sh ]
+  then
+      . ~/catkin_ws/devel/setup.sh
+  elif [ -f ~/catkin_ws/devel_isolated/setup.sh ]
+  then
+      . ~/catkin_ws/devel_isolated/setup.sh
+  else
+      . /opt/ros/melodic/setup.sh
+  fi
+
+%startscript
+  exec "roscore"
+  
+%runscript
+if [ -z "$@" ]; then
+  echo "Please run with some parameters."
+  echo "Example: singularity run ros-melodic-ar.sif roscore"
+  echo "Now, giving you BASH shell in ROS Singularoity"
+  echo ""
+  exec "/bin/bash"
+else 
+  exec "$@"
+fi
