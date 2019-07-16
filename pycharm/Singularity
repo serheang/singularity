@@ -1,7 +1,7 @@
 bootstrap: docker
 from:ubuntu:latest
 
-%label
+%labels
   MAINTAINER setan
   WHATAMI pycharm-edu
   VERSION 2018.3
