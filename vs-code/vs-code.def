@@ -1,0 +1,25 @@
+Bootstrap: library
+From: ubuntu:18.04
+
+%labels
+  MAINTAINER setan
+  WHATAMI visual studio code
+  VERSION 2018.3
+
+%environment
+  export PATH=/usr/local/bin:$PATH
+
+%files
+  code_1.36.1-1562627527_amd64.deb /root/
+
+%post
+  apt-get update -y
+  apt install -y wget libasound2
+  wget https://go.microsoft.com/fwlink/?LinkID=760868 -O /root/code.deb
+  apt install -y -f /root/code.deb
+  apt-get clean
+  rm /root/code.deb
+
+%runscript
+  echo "Run Visual Studio Code"
+  code
