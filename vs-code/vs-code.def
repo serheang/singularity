@@ -7,6 +7,8 @@ From: ubuntu:18.04
   VERSION 2018.3
 
 %environment
+  CONTAINER="vs-code"
+  export CONTAINER
   export PATH=/usr/local/bin:$PATH
 
 %files
@@ -21,5 +23,7 @@ From: ubuntu:18.04
   rm /root/code.deb
 
 %runscript
-  echo "Run Visual Studio Code"
+  echo "You will need to BIND $XDG_RUNTIME_DIR when running VS Code."
+  echo "$ singularity run -B $XDG_RUNTIME_DIR ${CONTAINER}.sif"
+  echo "Trying to run Visual Studio Code"
   code
