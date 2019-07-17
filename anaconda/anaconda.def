@@ -1,0 +1,31 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%labels
+    MAINTAINER iHPC
+    WHATAMI Anaconda2-2019.03
+
+%environment
+export PATH=/opt/conda/bin:$PATH
+
+
+%post
+  WHATAMI="Anaconda2-2019.03"
+# Installing Packages
+    apt-get -y update
+    apt-get install -y wget bzip2 ca-certificates curl git make gcc zlib1g-dev libncurses5-dev xz-utils libxrender-dev libxext-dev libxext6 libglib2.0-0 libsm6 cmake
+    apt-get install -y curl grep sed dpkg locales language-pack-en
+    apt install -y qt5dxcb-plugin
+
+# Installing Anaconda
+    wget https://repo.anaconda.com/archive/${WHATAMI}-Linux-x86_64.sh
+    rm -rf /opt/${WHATAMI}
+    rm -rf /opt/conda
+    bash ${WHATAMI}-Linux-x86_64.sh -b -p /opt/${WHATAMI}
+    ln -s /opt/${WHATAMI} /opt/conda
+    export PATH=/opt/conda/bin:$PATH
+    conda install -y conda
+    conda remove -y conda-build
+    conda update -y conda
+    conda clean --all
+    rm -f ${WHATAMI}-Linux-x86_64.sh
