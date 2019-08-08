@@ -1,0 +1,95 @@
+bootstrap: docker
+from: ubuntu:18.04
+
+%labels
+    AUTHOR Ser Heang TAN
+    WHATAMI https://github.com/memespaper/memes_pipeline.git
+    VERSION 20190729
+
+%help
+A singularity container for memes_pipeline
+It contains:
+a. python
+b. python-pip 
+c. python-tk
+d. git
+e. PIP packages:
+   Imagehash library == 3.5 (https://github.com/JohannesBuchner/imagehash)
+   Tensorflow >= 1.5.0 (https://github.com/tensorflow/tensorflow)
+   Sklearn
+   Numpy 
+   matplotlib
+   requests
+f. GIT: https://github.com/memespaper/memes_pipeline.git
+
+
+For more infomation on how to use singularity, please go to https://sylabs.io/guides/3.2/user-guide/.
+
+%environment
+    export PATH=/usr/local/bin:/opt/memes_pipeline:$PATH
+    export LANG=en_US.UTF-8
+    export LANGUAGE=${LANG}
+    export LC_MESSAGES=${LANG}
+    export LC_CTYPE=${LANG}
+
+%post
+    ## This can be use to mount a larger FS from host
+    ## possible /scratch from host or another directory
+    ## How to bind host:/data to container:/scratch --
+    ## singularity shell -B /data:/scratch memes_pipeline.sif
+
+    # create /scratch that can be use to bind directory from host
+    if [ -d /scratch ]; then
+      rmdir /scratch
+    fi
+    mkdir /scratch 
+
+    # ensure packages updated
+    apt update -y
+
+    # install without interactive prompt
+    export DEBIAN_FRONTEND=noninteractive
+    apt -y install curl wget vim nano zip unzip xterm
+    apt -y install python python-pip 
+    apt -y install git 
+    apt -y install vim 
+    apt -y install python-tk
+    
+    # pip packages 
+    pip install ImageHash==3.5
+    pip install tensorflow sklearn numpy
+    pip install matplotlib
+    pip install requests
+
+    # make sure memes_pipeline is empty
+    if [ -d /opt/memes_pipeline ]; then
+      rm -rf /opt/memes_pipeline
+    fi
+ 
+    # clone the memes_pipeline
+    git clone https://github.com/memespaper/memes_pipeline.git /opt/memes_pipeline
+
+    # cleanup
+    rm -rf /opt/memes_pipeline/.git
+    apt autoremove
+    apt clean
+
+%apprun xterm
+    unset SESSION_MANAGER
+    LC_ALL=C xterm 
+
+%runscript
+echo '
+This is singularity container use for memes_pipeline python scripts.
+
+Your home directory on the host is automatic mounted as $HOME in the container.  You can mount a larger partition from your host into container:/scratch by doing a bind (-B)
+Python scripts from https://github.com/memespaper/memes_pipeline.git is located in /opt/memes_pipeline/.
+
+If you want to modify the python scripts in memes_pipeline, you can:
+1. Run "git clone" to clone the memes_pipeline.git to a writable location (example /tmp or $HOME).
+    git clone https://github.com/memespaper/memes_pipeline.git 
+
+2. copy python scripts in container:/opt/memes_pipeline/*py to a writable location (example /tmp or $HOME).
+
+For more infomation on how to use singularity, please go to https://sylabs.io/guides/3.2/user-guide/.
+'
