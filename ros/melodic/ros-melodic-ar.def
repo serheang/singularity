@@ -15,8 +15,6 @@ Example:
 singularity exec ros-melodic-ar.sif lsb_release -a
 
 %labels
-  AUTHOR Brenton Leighton brenton.leighton@uts.edu.au
-  MAINTAINER Brenton Leighton
   WHATAMI ROS Melodic Singularity container
   VERSION 1.0
 
