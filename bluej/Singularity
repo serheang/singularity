@@ -1,0 +1,28 @@
+bootstrap: docker
+from:debian:latest
+
+%labels
+  MAINTAINER setan
+  WHATAMI bluej
+  VERSION 4.2.2
+%environment
+  export VERSION="422"
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  export VERSION="422"
+  apt -y update
+  apt -y install libcanberra-gtk-module libcanberra-gtk3-module
+  apt -y install openjdk-11-jdk libopenjfx-java openjfx
+  apt -y install wget firefox-esr
+  wget --no-check-certificate http://www.bluej.org/download/files/BlueJ-linux-${VERSION}.deb
+  dpkg -i BlueJ-linux-${VERSION}.deb
+
+  ## Cleanup
+  rm BlueJ-linux-${VERSION}.deb
+  apt clean
+  apt autoremove
+
+%runscript
+  echo "Run bluej ${VERSION} in debian container"
+  bluej 2>/dev/null
