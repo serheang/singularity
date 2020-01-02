@@ -1,0 +1,14 @@
+bootstrap: docker
+from: ros:kinetic-perception
+
+%environment 
+  PATH=$PATH:/opt/ros/bin/
+%setup
+  # This is done before go inside "container"
+
+%post
+  # This is execute in the container
+
+%runscript
+  # This is run everytime the container is run
+  roslaunch dyret_map_gaits exp1.launce

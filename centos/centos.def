@@ -1,0 +1,36 @@
+bootstrap: docker
+from:centos:6
+
+%help
+  This is just centos6 container.
+%labels
+  MAINTAINER setan
+  WHATAMI centos
+  VERSION 1
+
+%environment
+  export PATH=~/bin:$PATH
+
+%post
+  yum install -y epel-release
+  yum remove -y libvirt
+  yum install -y vim 
+  yum update -y
+  yum clean all
+
+
+%startscript
+  echo "hello"
+
+%runscript
+if [[ -z "${@}" ]]; then
+  echo "Please run with some parameters."
+  echo "Example: singularity run ros-melodic-ar.sif roscore"
+  echo "Now, giving you BASH shell in ROS Singularoity"
+  echo $PS1
+  echo $PATH
+  exec "/bin/bash"
+else
+  exec "${@}"
+fi
+
