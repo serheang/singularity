@@ -10,11 +10,12 @@ from:ubuntu:latest
   export PATH=/usr/local/bin:$PATH
 
 %post
+  export DEBIAN_FRONTEND=noninteractive
   apt-get update -y
   apt-get install -y wget
   apt-get install -y libxext6 libxrender1 libxtst6 libxi6 libfreetype6 
   apt-get install -y python3 python3-pip 
-  apt-get install -y python python-pip
+  apt-get install -y python2 python2-pip
   apt-get clean
 
   ## PREP
