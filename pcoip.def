@@ -1,0 +1,39 @@
+Bootstrap: docker
+From: ubuntu:bionic
+
+%labels
+  AUTHOR SerTAN
+  EMAIL serheang@gmail.com
+  WHATAMI pcoip-client
+
+%environment
+    export PATH=/usr/local/bin:$PATH
+    export LANG=en_US.UTF-8
+    export QT_XKB_CONFIG_ROOT=/user/share/X11/xkb
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+
+  apt-get update
+  apt -y install ca-certificates gnupg2 lsb-release libcanberra-gtk-module libcanberra-gtk3-module vim
+  apt -y install language-pack-en locales
+  locale-gen en_US.UTF-8
+  apt -y install wget \
+        lsb-release \
+        sudo \
+        libgnome-keyring0 \
+        libwebkitgtk-1.0 \
+        libgl1-mesa-dri \
+        mesa-utils
+  wget -O teradici-repo-latest.deb https://downloads.teradici.com/ubuntu/teradici-repo-$(lsb_release -cs)-latest.deb
+  apt -y install ./teradici-repo-latest.deb
+  apt-get update
+  apt -y install apt-transport-https
+  apt -y install pcoip-client=20.07.4-18.04
+
+%apprun pcoip-client
+  pcoip-client
+
+%runscript
+  echo "This is container"
+  $@
