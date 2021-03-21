@@ -1,0 +1,49 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%labels
+    MAINTAINER AnimalLogic
+    WHATAMI pcoip-client
+    VERSION 20.10
+
+%help
+    This is pcoip client in container
+
+%environment
+    export PATH=/usr/local/bin:$PATH
+    export LANG=en_US.UTF-8
+
+%post
+    VERSION=20.10.2-18.04
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update    
+    # Create a fairly sensible environment
+    #apt install -y gnupg2 dirmngr curl wget lsb-release vim nano net-tools ubuntu-standard tzdata zip unzip
+    apt install -y language-pack-en locales
+    locale-gen en_US.UTF-8
+
+    # Run GUI apps in the container
+    apt -y install libcanberra-gtk-module libcanberra-gtk3-module libasound2 usbutils udev
+    # Use the following two lines to install the Teradici repository package
+    apt-get update && apt-get install -y wget
+    wget -O teradici-repo-latest.deb https://downloads.teradici.com/ubuntu/teradici-repo-bionic-latest.deb
+    apt -y install ./teradici-repo-latest.deb
+    # Uncomment the following line to install Beta client builds from the internal repository
+    #echo "deb [arch=amd64] https://downloads.teradici.com/ubuntu bionic-beta non-free" > /etc/apt/sources.list.d/pcoip.list
+    # Install apt-transport-https to support the client installation
+    apt-get update && apt-get install -y apt-transport-https
+    # Install the client application
+    apt-get install -y pcoip-client=$VERSION
+
+%help
+    This is a container to run pcoip-client.
+    
+%apphelp pcoip-client
+    This is a container to run pcoip-client.
+    To build:
+    singularity build --fakeroot /scratch/pcoip.sif pcoip_client.def
+    To run:
+    singularity run --nv  --env PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native -B /var/run/udev,${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native --app pcoip-client pcoip.sif
+%apprun pcoip-client
+    pcoip-client
+
