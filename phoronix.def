@@ -1,0 +1,47 @@
+Bootstrap: docker
+From: ubuntu:20.04
+
+%labels
+    MAINTAINER SerTAN
+    VERSION 10
+
+%help
+    This is phoronix test suite in container
+
+%files
+
+
+%environment
+    export PATH=/usr/local/bin:$PATH
+    export LANG=en_AU.UTF-8
+    export LC_ALL=C
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update --allow-unauthenticated --allow-insecure-repositories && apt -y install wget
+    apt -y install ca-certificates
+    update-ca-certificates -v -f
+    apt -y install curl wget vim git
+#    cd /usr/local/
+#    git clone https://github.com/phoronix-test-suite/phoronix-test-suite.git
+    apt -y install php-cli php-gd php-common php-bz2 php-curl php-sqlite3 php-xml apt-utils php-zip unzip
+    apt -y install curl bzip2 sqlite3 build-essential autoconf apt-file cmake mesa-utils vulkan-utils \
+      cmake-data libxml2-dev swig libopencv-dev libfreetype6-dev \
+      libboost-all-dev libasio-dev libboost-iostreams-dev libjpeg-dev \
+      libtiff5-dev libpng-dev zlib1g-dev python3-pip python3-yaml \
+      libopenexr-dev libbz2-dev freeglut3-dev opencl-headers unzip \
+      ocl-icd-libopencl1 clinfo ocl-icd-opencl-dev libsdl1.2-dev \
+      libsdl-gfx1.2-dev libsdl-net1.2-dev libsdl-image1.2-dev \
+      libsdl-ttf2.0-dev libsdl-mixer1.2-dev
+    apt -y install libaio-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev meson \
+      libcairo2-dev libgdk-pixbuf2.0-dev golang p7zip-full libblas-dev libopenblas-base libopenblas-dev \
+      libatlas-base-dev liblapack-dev liblapacke-dev libeigen3-dev libsnappy-dev vulkan-utils libvulkan-dev \
+      libbenchmark-dev libncurses5-dev bison flex libimlib2-dev tcl tclsh yasm nasm libfftw3-dev fftw-dev
+    dpkg -i /tmp/phoronix-test-suite_10.2.2_all.deb
+    /usr/bin/phoronix-test-suite pts/benchmark
+    /usr/bin/phoronix-test-suite system/benchmark
+#    /usr/bin/phoronix-test-suite install system/all
+#    /usr/bin/phoronix-test-suite install git/all
+
+%runscript
+    $@
