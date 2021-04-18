@@ -1,0 +1,66 @@
+Bootstrap: docker
+From: debian:latest
+
+IncludeCmd: yes
+
+%labels
+    AUTHOR SerTan
+    VERSION 1.0
+
+%environment
+    export PATH=/usr/local/bin:$PATH
+    export LANG=en_US.UTF-8
+    export LC_ALL=C
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt -y update
+
+    # Create a fairly sensible environment
+    #apt install -y gnupg2 dirmngr curl wget lsb-release vim nano net-tools ubuntu-standard tzdata zip unzip
+    #apt install -y language-pack-en locales
+    #locale-gen en_US.UTF-8
+
+    # Run GUI apps in the container
+    apt install -y libcanberra-gtk-module libcanberra-gtk3-module libasound2
+    # Extra libraries
+    apt install -y libx11-xcb1 libxcb-dri3-0 libnss3 libdrm2 libgbm1 libxss1
+
+    # Some extra apps
+    ## To be able to add gnupg key
+    apt install -y gnupg2
+    ## Tp be able to use add-apt-repository
+    apt install -y software-properties-common
+    ## Pandoc
+    apt install -y pandoc
+
+####################################################################################
+%help
+    This is a container build with [singularity](https://sylabs.io/guides/3.6/user-guide/).
+    This is [typora](https://typora.io/) running in singularity.  You can refer to [typora support](https://support.typora.io/) for more info.
+
+    To run:
+    singularity run -B $XDG_RUNTIME_DIR --app typora typora.sif
+
+%appinstall typora
+    #wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+    # or run:
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
+    # add Typora's repository
+    add-apt-repository 'deb https://typora.io/linux ./'
+    apt-get update
+    # install typora
+    apt-get -y install typora
+    apt clean all
+    apt autoclean
+
+%apphelp typora
+    This is [typora](https://typora.io/) running in singularity.  You can refer to [typora support](https://support.typora.io/) for more info.
+
+%apprun typora
+    /usr/bin/typora
+
+%runscript
+    echo "This is a typora in container."
+    echo "How to get help:"
+    echo "singularity run-help typora.sif"
