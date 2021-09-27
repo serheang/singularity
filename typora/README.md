@@ -49,6 +49,11 @@ Here is the steps for installing in CentOS 7:
 	```
 	or
 	```
+	singularity build --remote typora.sif typora.def
+	```
+	> To build remotely at https://cloud.sylabs.io/home
+	or
+	```
 	singyularity build --fakeroot typora.sif typora.def
 	```
 	> To use `--fakeroot`, you will need to read about it [here](https://sylabs.io/guides/3.6/admin-guide/user_namespace.html)
